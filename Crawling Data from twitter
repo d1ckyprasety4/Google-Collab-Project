@@ -1,0 +1,9 @@
+!pip install pandas
+!curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+!sudo apt-get install -y nodejs
+
+filename = 'Data Pemilu 2024.csv'
+search_keyword = 'Pemilu 2024 until:2024-10-22 since:2024-01-01'
+limit = 100
+
+!npx --yes tweet-harvest@latest -o "{filename}" -s "{search_keyword}" -l {limit} --token ""
