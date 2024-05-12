@@ -1,0 +1,115 @@
+import pandas as pd
+import numpy as np
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+data = [ ['Setra Ramos' , 'Telur Ayam' , 'Sarden Maya'],
+ ['Indomie Goreng' , 'Telur Ayam'],
+ ['Rojolele' , 'Sampoerna Kretek'],
+ ['Rinso bubuk' , 'Setra Ramos'],
+ ['Saos Sambal ABC' , 'Indomie Goreng' , 'Telur Ayam'],
+ ['Blue Band' , 'Sari Roti'],
+ ['Power Glue' , 'Molto Cair' , 'Sarimie Kaldu Ayam'],
+ ['Rojolele'],
+ ['Indomie Goreng' , 'Indomie Kari Ayam' , 'Telur Ayam'],
+ ['Setra Ramos' , 'Sarden ABC , Rinso Bubuk' , 'Power Glue'],
+ ['Djarum Super' , 'Soft Klin Softergent Bubuk'],
+ ['Djarum Super' , 'Kapal Api Mix'],
+ ['AICE Ice Cream'],
+ ['Head & Shoulder' , 'Le Mineral Botol'],
+ ['Saos Sambal ABC' , 'Indomie Goreng' , 'Telur Ayam'],
+ ['Sarimie Ayam Bawang' , 'Telur Ayam' , 'Fanta 390 ml'],
+ ['Aroma Bold' , 'Esse Lite' , 'Magnum Blue'],
+ ['Pandan Wangi' , 'Sarimie Kaldu Ayam'],
+ ['Djarum Super' , 'Kapal Api Mix'],
+ ['Good Day Freeze' , 'Sampoerna Kretek' , 'Aqua Botol'],
+ ['Head & Shoulder' , 'Magnum Blue'],
+ ['Setra Ramos' , 'Sarden ABC' , 'Rinso Bubuk' , 'Sunsilk'],
+ ['Sunsilk' , 'Chocolatos'],
+ ['Setra Ramos' , 'Telur Ayam' , 'Sarden ABC'],
+ ['Pandan Wangi' , 'Telur Ayam' , 'Sarden ABC'],
+ ['Indomie Goreng' , 'Indomie Kari Ayam' , 'Telur Ayam'],
+ ['Kapal Api Mix' , 'Gudang Garam Filter'],
+ ['Minak Djinggo'],
+ ['French Fries 2000'],
+ ['Blue Band' , 'Sari Roti'],
+ ['Setra Ramos' , 'Sarden ABC' , 'Rinso Bubuk'],
+ ['Indomie Kari Ayam' , 'Telur Ayam' , 'Fanta 390ml'],
+ ['Esse Lite' , 'Camel'],
+ ['Gudang Garam Filter' , 'Sampoerna Kretek'],
+ ['Chocolatos' , 'Momogi' , 'Le Minerale' , 'Relaxa Mint'],
+ ['Head & Shoulder' , 'Magnum Blue'],
+ ['Rojolele' , 'Sarden ABC' , 'Rinso Bubuk' , 'Power Glue'],
+ ['Esse Lite' , 'Kapal Api Mix'],
+ ['Djarum Super' , 'Kapal Api Mix'],
+ ['Mentos Mint' , 'White Koffie'],
+ ['Indomie Goreng' , 'Sarimie Ayam Bawang' , 'Telur Ayam'],
+ ['Good Day Freeze' , 'Sampoerna Kretek'],
+ ['Camel' , 'Kapal Api Mix'],
+ ['Pandan Wangi' , 'Telur Ayam' , 'Sarden ABC'],
+ ['White Koffie Less Sugar'],
+ ['Cheetos' , 'Chocolatos'],
+ ['Indomie Kari Ayam' , 'Telur Ayam' , 'Fanta 390ml'],
+ ['Le Minerale'],
+ ['Sunsilk'],
+ ['Chiki Taro' , 'Cheetos' , 'Aqua Botol'],
+ ['Good Day Cappucino' , 'Sampoerna Kretek' , 'Aqua Botol'],
+ ['Head & Shoulder' , 'Magnum Blue'],
+ ['Mie Sedaap Goreng' , 'Sarimie Kaldu Ayam' , 'Telur Ayam'],
+ ['Sunsilk' , 'Chocolatos'],
+ ['Sunsilk' , 'Chocolatos'],
+ ['Indomie Goreng' , 'Indomie Kari Ayam' , 'Telur Ayam'],
+ ['French Fries 2000' , 'Telur Ayam' , 'Sarden ABC'],
+ ['Sarimie Rebus' , 'Telur Ayam' , 'Fanta 390 ml'],
+ ['Telur Ayam' , 'Sarden ABC' , 'Relaxa Mint'],
+ ['Power Glue'],
+ ['Chocolatos' , 'Rojolele' , 'AOKA'],
+ ['Telur Ayam' , 'Mentos Mint' , 'Power Glue'],
+ ['Aroma Bold'],
+ ['Pandan Wangi'],
+ ['Indomie Kari Ayam'],
+ ['Head & Shoulder' , 'Magnum Blue'],
+ ['Djarum Super' , 'Kapal Api Mix'],
+ ['Rojolele'],
+ ['Aroma Bold' , 'Esse Lite' , 'Good Day Freeze'],
+ ['Indomie Goreng Rendang' , 'Sarimie Ayam Bawang' , 'Telur Ayam'],
+ ['White Koffie' , 'Sunsilk'],
+ ['Cheetos' , 'Chocolatos'],
+ ['Djarum Super' , 'Kapal Api Mix'],
+ ['Sunsilk' , 'Head & Shoulder'],
+ ['Aqua Gelas'],
+ ['Paddle Pop Trico' , 'Cheetos' , 'Chiki Taro'],
+ ['Indomie Goreng' , 'Indomie Kari Ayam' , 'Telur Ayam'],
+ ['AOKA' , 'Esse Lite' , 'Good Day Cappucino'],
+ ['Head & Shoulder' , 'Magnum Blue'],
+ ['Le Minerale' , 'Camel' , 'Sunsilk'],
+ ['Sampoerna Kretek'],
+ ['Sari Roti' , 'Pandan Wangi'],
+ ['Sampoerna Kretek'],
+ ['Sunsilk' , 'Chocolatos'],
+ ['Kue Sus' , 'Kacang Atom Garuda' , 'Chocolatos'],
+ ['Indomie Kari Ayam' , 'Telur Ayam' , 'Fanta 390ml'],
+ ['Djarum Super' , 'Kapal Api Mix'],
+ ['Minak Djinggo' , 'Sari Roti'],
+ ['Blue Band' , 'Setra Ramos' , 'Telur Ayam'],
+ ['Good Day Cappucino' , 'Setra Ramos' , 'Telur Ayam'] ]
+
+from mlxtend.frequent_patterns import apriori
+from mlxtend.frequent_patterns import association_rules
+
+from mlxtend.preprocessing import TransactionEncoder
+
+te = TransactionEncoder()
+te_ary = te.fit(data).transform(data)
+df = pd.DataFrame(te_ary, columns=te.columns_)
+
+frequent_itemsets = apriori(df, min_support=0.060, use_colnames=True)
+
+print(frequent_itemsets)
+
+rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.3)
+
+print(rules)
